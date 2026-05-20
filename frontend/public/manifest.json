@@ -1,0 +1,6 @@
+{
+  "short_name": "Local-First Agent Console",
+  "name": "Local-First Agent Console",
+  "start_url": ".",
+  "display": "standalone"
+}
