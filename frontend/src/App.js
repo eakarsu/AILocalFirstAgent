@@ -24,6 +24,26 @@ import CustomViewsPage from './pages/CustomViewsPage';
 import { getToken } from './services/api';
 import './App.css';
 
+import CodexCustomVizFeature from './pages/CodexCustomVizFeature';
+import CodexOperationsFeature from './pages/CodexOperationsFeature';
+
+import TimelineView from './pages/TimelineView';
+
+// Apply pass 7: full backlog implementation
+import AILocalFallbackOrchestratorPage from './pages/AILocalFallbackOrchestratorPage';
+import AIConflictAutoResolverPage from './pages/AIConflictAutoResolverPage';
+import AIRagRerankPlannerPage from './pages/AIRagRerankPlannerPage';
+import AIPromptRedactionRewriterPage from './pages/AIPromptRedactionRewriterPage';
+import CrdtEnginePage from './pages/CrdtEnginePage';
+import EncryptedStorePage from './pages/EncryptedStorePage';
+import PluginsPage from './pages/PluginsPage';
+import CapabilitiesPage from './pages/CapabilitiesPage';
+import OutboxQueuePage from './pages/OutboxQueuePage';
+import SyncOplogPage from './pages/SyncOplogPage';
+import PrivacyBudgetPage from './pages/PrivacyBudgetPage';
+import ModelCachePage from './pages/ModelCachePage';
+import ConflictProvenanceTimelinePage from './pages/ConflictProvenanceTimelinePage';
+
 function RequireAuth({ children }) {
   const location = useLocation();
   if (!getToken()) return <Navigate to="/login" replace state={{ from: location }} />;
@@ -38,6 +58,10 @@ function Shell() {
         <Topbar />
         <div style={{ padding: '24px 32px' }}>
           <Routes>
+        <Route path="/insights/timeline" element={<TimelineView />} />
+        <Route path="/codex/custom-viz" element={<CodexCustomVizFeature />} />
+        <Route path="/codex/operations" element={<CodexOperationsFeature />} />
+
             <Route path="/" element={<Dashboard />} />
             <Route path="/indexed-sources" element={<IndexedSourcesPage />} />
             <Route path="/scheduled-macros" element={<ScheduledMacrosPage />} />
@@ -56,6 +80,20 @@ function Shell() {
             <Route path="/ai/daily-digest" element={<AIDailyDigestPage />} />
             <Route path="/wb/macro-scheduler" element={<MacroSchedulerWorkbench />} />
             <Route path="/custom-views" element={<CustomViewsPage />} />
+            {/* Apply pass 7 routes */}
+            <Route path="/ai/local-fallback-orchestrator" element={<AILocalFallbackOrchestratorPage />} />
+            <Route path="/ai/conflict-auto-resolver" element={<AIConflictAutoResolverPage />} />
+            <Route path="/ai/rag-rerank-planner" element={<AIRagRerankPlannerPage />} />
+            <Route path="/ai/prompt-redaction-rewriter" element={<AIPromptRedactionRewriterPage />} />
+            <Route path="/crdt" element={<CrdtEnginePage />} />
+            <Route path="/encrypted-store" element={<EncryptedStorePage />} />
+            <Route path="/plugins" element={<PluginsPage />} />
+            <Route path="/capabilities" element={<CapabilitiesPage />} />
+            <Route path="/outbox" element={<OutboxQueuePage />} />
+            <Route path="/sync-oplog" element={<SyncOplogPage />} />
+            <Route path="/privacy-budget" element={<PrivacyBudgetPage />} />
+            <Route path="/model-cache" element={<ModelCachePage />} />
+            <Route path="/conflict-provenance-timeline" element={<ConflictProvenanceTimelinePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>

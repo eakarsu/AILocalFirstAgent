@@ -12,7 +12,11 @@ const SCHEMAS = {
   'privacy-classifier': `{"data_class":"public"|"personal"|"sensitive"|"medical"|"financial","confidence":number,"detected_pii":[string],"recommended_route":"cloud"|"on-device"|"redact"|"deny","rationale":string,"summary":string}`,
   'model-router-select': `{"chosen_model":string,"reasoning":string,"alternatives":[{"model":string,"trade_off":string}],"on_device":boolean,"estimated_latency_ms":number,"estimated_cost_usd":number,"summary":string}`,
   'conflict-finder': `{"subject":string,"conflicts":[{"description":string,"a_source":string,"b_source":string,"severity":"low"|"medium"|"high"}],"deduplicated_facts":[string],"summary":string}`,
-  'daily-digest': `{"date":string,"highlights":[string],"action_items":[{"item":string,"due":string,"owner":string}],"emails_to_reply":[string],"meetings_summary":[string],"unfinished_from_yesterday":[string],"summary":string}`
+  'daily-digest': `{"date":string,"highlights":[string],"action_items":[{"item":string,"due":string,"owner":string}],"emails_to_reply":[string],"meetings_summary":[string],"unfinished_from_yesterday":[string],"summary":string}`,
+  'local-fallback-orchestrator': `{"primary_provider":string,"failure_class":string,"fallback_chain":[{"provider":string,"on_device":boolean,"degradation":string}],"degradation_report":string,"retry_strategy":string,"summary":string}`,
+  'conflict-auto-resolver': `{"subject":string,"merge_strategy":string,"proposed_merge":{},"crdt_ops":[{"op":string,"path":string,"value":any}],"residual_conflicts":[string],"confidence":number,"summary":string}`,
+  'rag-rerank-planner': `{"query":string,"reranked":[{"path":string,"old_score":number,"new_score":number,"reason":string}],"embedding_refresh_targets":[string],"refresh_priority":"low"|"medium"|"high","summary":string}`,
+  'prompt-redaction-rewriter': `{"original":string,"rewritten":string,"redactions":[{"text":string,"category":string,"placeholder":string}],"safe_to_send_cloud":boolean,"summary":string}`
 };
 
 const SAMPLES = {
@@ -60,6 +64,26 @@ const SAMPLES = {
     { label: 'Today brief', values: {"date":"2026-05-17","focus":"work"} },
     { label: 'Past Friday', values: {"date":"2026-05-15","focus":"work + family"} },
     { label: 'Travel day', values: {"date":"2026-06-12","focus":"travel"} }
+  ],
+  'local-fallback-orchestrator': [
+    { label: 'Cloud timeout', values: {"primary_provider":"openrouter:anthropic/claude-sonnet","failure_class":"timeout","sensitivity":"personal","task_description":"Summarize 20 emails"} },
+    { label: 'Offline mode', values: {"primary_provider":"openrouter:openai/gpt-4o","failure_class":"network-offline","sensitivity":"medical","task_description":"Classify lab note"} },
+    { label: 'Rate-limit', values: {"primary_provider":"openrouter:meta/llama-3","failure_class":"rate-limited","sensitivity":"sensitive","task_description":"Draft reply"} }
+  ],
+  'conflict-auto-resolver': [
+    { label: 'Contact merge', values: {"entity":"contacts","subject":"Jane Doe phone number","a_value":"+1 415-555-0100","b_value":"+1 415-555-0199","a_timestamp":"2026-05-15T10:00Z","b_timestamp":"2026-05-15T11:30Z"} },
+    { label: 'Calendar event', values: {"entity":"calendar","subject":"Q3 planning","a_value":"2026-05-20 14:00","b_value":"2026-05-20 15:00","a_timestamp":"2026-05-18T09:00Z","b_timestamp":"2026-05-18T09:05Z"} },
+    { label: 'File rename', values: {"entity":"files","subject":"audit.pdf vs audit-final.pdf","a_value":"audit.pdf","b_value":"audit-final.pdf","a_timestamp":"2026-05-10T09:00Z","b_timestamp":"2026-05-10T10:00Z"} }
+  ],
+  'rag-rerank-planner': [
+    { label: 'Stale lease', values: {"query":"office lease termination","top_k":5,"current_results":"lease-2019.pdf, lease-2024.pdf, hr-policy.pdf"} },
+    { label: 'Refresh code docs', values: {"query":"webhook retry strategy","top_k":10,"current_results":"webhooks.md, retry.md, README.md"} },
+    { label: 'Travel notes', values: {"query":"japan trip itinerary","top_k":5,"current_results":"tokyo.md, kyoto.md, flights.pdf"} }
+  ],
+  'prompt-redaction-rewriter': [
+    { label: 'SSN in email', values: {"prompt":"Reply to Jane: my SSN is 123-45-6789, please update the form.","target":"cloud LLM"} },
+    { label: 'Med record', values: {"prompt":"Summarize patient John Doe (DOB 1985-04-12) lab results showing A1C 6.4.","target":"cloud LLM"} },
+    { label: 'Internal IP', values: {"prompt":"Investigate failed login from 10.0.0.42 by user@acme.com.","target":"cloud LLM"} }
   ]
 };
 
@@ -159,6 +183,38 @@ router.post('/daily-digest', async (req, res) => {
   try {
     const result = await ai.runFeature('daily-digest', SCHEMAS['daily-digest'], req.body || {});
     await record('daily-digest', req.body || {}, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.post('/local-fallback-orchestrator', async (req, res) => {
+  try {
+    const result = await ai.runFeature('local-fallback-orchestrator', SCHEMAS['local-fallback-orchestrator'], req.body || {});
+    await record('local-fallback-orchestrator', req.body || {}, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.post('/conflict-auto-resolver', async (req, res) => {
+  try {
+    const result = await ai.runFeature('conflict-auto-resolver', SCHEMAS['conflict-auto-resolver'], req.body || {});
+    await record('conflict-auto-resolver', req.body || {}, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.post('/rag-rerank-planner', async (req, res) => {
+  try {
+    const result = await ai.runFeature('rag-rerank-planner', SCHEMAS['rag-rerank-planner'], req.body || {});
+    await record('rag-rerank-planner', req.body || {}, result);
+    res.json(result);
+  } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+router.post('/prompt-redaction-rewriter', async (req, res) => {
+  try {
+    const result = await ai.runFeature('prompt-redaction-rewriter', SCHEMAS['prompt-redaction-rewriter'], req.body || {});
+    await record('prompt-redaction-rewriter', req.body || {}, result);
     res.json(result);
   } catch (e) { res.status(500).json({ error: e.message }); }
 });

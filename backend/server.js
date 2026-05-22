@@ -38,6 +38,17 @@ app.use('/api/dashboard', require('./routes/dashboard'));
 // Custom Views — mounted BEFORE any 404 handler
 app.use('/api/custom-views', require('./routes/customViews'));
 
+// Apply pass 7: full backlog implementation
+app.use('/api/crdt', require('./routes/crdt'));
+app.use('/api/encrypted-store', require('./routes/encryptedStore'));
+app.use('/api/plugins', require('./routes/plugins'));
+app.use('/api/capabilities', require('./routes/capabilities'));
+app.use('/api/outbox', require('./routes/outbox'));
+app.use('/api/sync-oplog', require('./routes/syncOplog'));
+app.use('/api/privacy-budget', require('./routes/privacyBudget'));
+app.use('/api/model-cache', require('./routes/modelCache'));
+app.use('/api/conflict-provenance-timeline', require('./routes/conflictProvenanceTimeline'));
+
 // 404 for unmatched /api routes (must remain LAST)
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found', path: req.originalUrl }));
 

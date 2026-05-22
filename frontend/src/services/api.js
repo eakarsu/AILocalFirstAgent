@@ -101,6 +101,83 @@ export const syncRulesApi = {
   remove: (id) => request(`/custom-views/rules/${id}`, { method: 'DELETE' }),
 };
 
+// ---- Apply pass 7: full backlog implementation ----
+export const aiLocalFallbackOrchestrator = (body) => request('/ai/local-fallback-orchestrator', { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiConflictAutoResolver = (body) => request('/ai/conflict-auto-resolver', { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiRagRerankPlanner = (body) => request('/ai/rag-rerank-planner', { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiPromptRedactionRewriter = (body) => request('/ai/prompt-redaction-rewriter', { method: 'POST', body: JSON.stringify(body || {}) });
+
+export const crdtApi = {
+  listDocs: () => request('/crdt/documents'),
+  createDoc: (d) => request('/crdt/documents', { method: 'POST', body: JSON.stringify(d) }),
+  getDoc: (k) => request(`/crdt/documents/${encodeURIComponent(k)}`),
+  submitOps: (k, body) => request(`/crdt/documents/${encodeURIComponent(k)}/ops`, { method: 'POST', body: JSON.stringify(body) }),
+  listOps: (k) => request(`/crdt/documents/${encodeURIComponent(k)}/ops`),
+  deleteDoc: (k) => request(`/crdt/documents/${encodeURIComponent(k)}`, { method: 'DELETE' }),
+};
+
+export const encryptedStoreApi = {
+  listKeys: () => request('/encrypted-store/keys'),
+  createKey: (d) => request('/encrypted-store/keys', { method: 'POST', body: JSON.stringify(d || {}) }),
+  rotateKey: (id) => request(`/encrypted-store/keys/${encodeURIComponent(id)}/rotate`, { method: 'POST' }),
+  listEntries: (namespace) => request(`/encrypted-store/entries${namespace ? `?namespace=${encodeURIComponent(namespace)}` : ''}`),
+  putEntry: (d) => request('/encrypted-store/entries', { method: 'PUT', body: JSON.stringify(d) }),
+  getEntry: (ns, key) => request(`/encrypted-store/entries/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`),
+  deleteEntry: (ns, key) => request(`/encrypted-store/entries/${encodeURIComponent(ns)}/${encodeURIComponent(key)}`, { method: 'DELETE' }),
+  sealDemo: (d) => request('/encrypted-store/seal-demo', { method: 'POST', body: JSON.stringify(d) }),
+};
+
+export const pluginsApi = {
+  list: () => request('/plugins'),
+  get: (slug) => request(`/plugins/${encodeURIComponent(slug)}`),
+  create: (d) => request('/plugins', { method: 'POST', body: JSON.stringify(d) }),
+  update: (slug, d) => request(`/plugins/${encodeURIComponent(slug)}`, { method: 'PUT', body: JSON.stringify(d) }),
+  remove: (slug) => request(`/plugins/${encodeURIComponent(slug)}`, { method: 'DELETE' }),
+};
+
+export const capabilitiesApi = {
+  handshake: (d) => request('/capabilities/handshake', { method: 'POST', body: JSON.stringify(d) }),
+  list: (deviceId) => request(`/capabilities/handshakes${deviceId ? `?device_id=${encodeURIComponent(deviceId)}` : ''}`),
+  latest: (deviceId) => request(`/capabilities/handshakes/${encodeURIComponent(deviceId)}/latest`),
+};
+
+export const outboxApi = {
+  list: (status) => request(`/outbox${status ? `?status=${encodeURIComponent(status)}` : ''}`),
+  enqueue: (d) => request('/outbox/enqueue', { method: 'POST', body: JSON.stringify(d) }),
+  replay: (limit) => request('/outbox/replay', { method: 'POST', body: JSON.stringify({ limit }) }),
+  remove: (id) => request(`/outbox/${id}`, { method: 'DELETE' }),
+  stats: () => request('/outbox/stats'),
+};
+
+export const syncOplogApi = {
+  list: (q = {}) => {
+    const params = new URLSearchParams(q).toString();
+    return request(`/sync-oplog${params ? `?${params}` : ''}`);
+  },
+  create: (d) => request('/sync-oplog', { method: 'POST', body: JSON.stringify(d) }),
+  vectorClock: () => request('/sync-oplog/vector-clock'),
+  happensBefore: (a, b) => request(`/sync-oplog/happens-before?a=${a}&b=${b}`),
+};
+
+export const privacyBudgetApi = {
+  list: (email) => request(`/privacy-budget${email ? `?user_email=${encodeURIComponent(email)}` : ''}`),
+  create: (d) => request('/privacy-budget', { method: 'POST', body: JSON.stringify(d) }),
+  spend: (email, d) => request(`/privacy-budget/${encodeURIComponent(email)}/spend`, { method: 'POST', body: JSON.stringify(d) }),
+  reset: (email) => request(`/privacy-budget/${encodeURIComponent(email)}/reset`, { method: 'POST' }),
+  ledger: (email) => request(`/privacy-budget/${encodeURIComponent(email)}/ledger`),
+};
+
+export const modelCacheApi = {
+  list: () => request('/model-cache'),
+  create: (d) => request('/model-cache', { method: 'POST', body: JSON.stringify(d) }),
+  pin: (name) => request(`/model-cache/${encodeURIComponent(name)}/pin`, { method: 'POST' }),
+  unpin: (name) => request(`/model-cache/${encodeURIComponent(name)}/unpin`, { method: 'POST' }),
+  evict: (name) => request(`/model-cache/${encodeURIComponent(name)}/evict`, { method: 'POST' }),
+  verify: (name, expected) => request(`/model-cache/${encodeURIComponent(name)}/verify`, { method: 'POST', body: JSON.stringify({ expected_checksum: expected }) }),
+  quota: () => request('/model-cache/quota'),
+  remove: (name) => request(`/model-cache/${encodeURIComponent(name)}`, { method: 'DELETE' }),
+};
+
 export const webhooksApi = {
   list: () => request('/webhooks'),
   create: (d) => request('/webhooks', { method: 'POST', body: JSON.stringify(d) }),

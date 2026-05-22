@@ -21,11 +21,28 @@ const AI_LINKS = [
   { to: '/ai/model-router-select', label: 'AI · Model Router' },
   { to: '/ai/conflict-finder', label: 'AI · Conflict Finder' },
   { to: '/ai/daily-digest', label: 'AI · Daily Digest' },
+  // Apply pass 7
+  { to: '/ai/local-fallback-orchestrator', label: 'AI · Local Fallback Orchestrator' },
+  { to: '/ai/conflict-auto-resolver', label: 'AI · Conflict Auto-Resolver' },
+  { to: '/ai/rag-rerank-planner', label: 'AI · RAG Re-Rank Planner' },
+  { to: '/ai/prompt-redaction-rewriter', label: 'AI · Prompt Redaction Rewriter' },
 ];
 
 const CUSTOM_LINKS = [
   { to: '/wb/macro-scheduler', label: 'Macro Scheduler' },
   { to: '/custom-views', label: 'Sync Views' },
+];
+
+// Apply pass 7: local-first infrastructure
+const INFRA_LINKS = [
+  { to: '/crdt', label: 'CRDT Engine' },
+  { to: '/encrypted-store', label: 'Encrypted Store' },
+  { to: '/plugins', label: 'Plugin Manifests' },
+  { to: '/capabilities', label: 'Capability Handshake' },
+  { to: '/outbox', label: 'Offline Outbox' },
+  { to: '/sync-oplog', label: 'Sync Op Log' },
+  { to: '/privacy-budget', label: 'Privacy Budget' },
+  { to: '/model-cache', label: 'Model Cache' },
 ];
 
 export default function Sidebar() {
@@ -43,6 +60,8 @@ export default function Sidebar() {
       {AI_LINKS.map((l) => <NavLink key={l.to} to={l.to}>{l.label}</NavLink>)}
       {CUSTOM_LINKS.length > 0 && <div className="sidebar-group-label">Workbenches</div>}
       {CUSTOM_LINKS.map((l) => <NavLink key={l.to} to={l.to}>{l.label}</NavLink>)}
+      <div className="sidebar-group-label">Local-First Infra</div>
+      {INFRA_LINKS.map((l) => <NavLink key={l.to} to={l.to}>{l.label}</NavLink>)}
       <div className="sidebar-user">
         {user && (
           <div className="sidebar-user-info">
