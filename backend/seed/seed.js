@@ -1,6 +1,12 @@
 const fs = require('fs');
 const path = require('path');
 const pool = require('../config/database');
+if (process.env.ALLOW_DEMO_SEED !== 'true' || process.env.NODE_ENV === 'production') {
+  throw new Error('Demo seed is quarantined; set ALLOW_DEMO_SEED=true outside production to run explicitly');
+}
+if (!/^scrypt\$[a-f0-9]+\$[a-f0-9]+$/i.test(process.env.DEMO_SEED_PASSWORD_HASH || '')) {
+  throw new Error('DEMO_SEED_PASSWORD_HASH must be an explicitly generated scrypt hash');
+}
 
 async function main() {
   const migDir = path.join(__dirname, '..', 'migrations');
@@ -10,7 +16,9 @@ async function main() {
     catch (e) { console.warn(`[seed] ${f} warn: ${e.message}`); }
   }
   await pool.query(
-    "INSERT INTO users (email, password, name, role) VALUES ('admin@local-first-agent.local','secure123','Admin','commander') ON CONFLICT (email) DO NOTHING"
+    `INSERT INTO users (email,password,name,role)
+     VALUES($1,$2,'Demo Administrator','commander') ON CONFLICT(email) DO NOTHING`,
+    [process.env.DEMO_SEED_EMAIL || 'demo-admin@localhost.invalid', process.env.DEMO_SEED_PASSWORD_HASH]
   );
   console.log('[seed] demo user ready');
 

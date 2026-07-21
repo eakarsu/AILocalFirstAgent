@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const path = require('path');
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
+require('./governance/runtime').validateRuntime();
 
 const { authenticateToken } = require('./middleware/auth');
 
@@ -48,6 +49,7 @@ app.use('/api/sync-oplog', require('./routes/syncOplog'));
 app.use('/api/privacy-budget', require('./routes/privacyBudget'));
 app.use('/api/model-cache', require('./routes/modelCache'));
 app.use('/api/conflict-provenance-timeline', require('./routes/conflictProvenanceTimeline'));
+app.use('/api/governed-agent-runs', require('./governance'));
 
 // 404 for unmatched /api routes (must remain LAST)
 app.use('/api', (req, res) => res.status(404).json({ error: 'Not found', path: req.originalUrl }));

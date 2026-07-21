@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { login, setToken, setStoredUser } from '../services/api';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('admin@local-first-agent.local');
-  const [password, setPassword] = useState('secure123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
@@ -35,7 +35,6 @@ export default function LoginPage() {
         <button className="btn" type="submit" disabled={busy} style={{ width: '100%', marginTop: 10 }}>
           {busy ? 'Signing in...' : 'Sign In'}
         </button>
-        <p className="login-hint">demo: <code>admin@local-first-agent.local</code> / <code>secure123</code></p>
       </form>
     </div>
   );

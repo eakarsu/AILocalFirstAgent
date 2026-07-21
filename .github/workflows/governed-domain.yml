@@ -1,0 +1,37 @@
+name: governed-domain-controls
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-free-governance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Domain, contract, authorization, integration, migration, failure, and lifecycle tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -d backend/src/governance ]]; then runtime=backend/src
+          elif [[ -d server/governance ]]; then runtime=server
+          else runtime=backend
+          fi
+          if [[ -f "$runtime/server.js" ]]; then host=server.js; else host=index.js; fi
+          node --test "$runtime"/governance/tests/*.test.js
+          node --check "$runtime/governance/domain.js"
+          node --check "$runtime/governance/policy.js"
+          node --check "$runtime/governance/store.js"
+          node --check "$runtime/governance/router.js"
+          node --check "$runtime/governance/index.js"
+          node --check "$runtime/$host"
+          bash -n start.sh
+

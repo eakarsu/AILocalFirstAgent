@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:4051/api';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:4051/api';
 const TOKEN_KEY = 'local_first_agent_token';
 const USER_KEY = 'local_first_agent_user';
 
