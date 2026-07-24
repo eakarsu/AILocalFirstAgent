@@ -34,6 +34,10 @@ migrate() {
 
 start_services() {
   check
+  set -a
+  # shellcheck disable=SC1091
+  . "$PROJECT_DIR/.env"
+  set +a
   [[ -d "$API_DIR/node_modules" ]] ||
     { echo "Backend dependencies are absent; run reviewed locked installs separately." >&2; return 1; }
 
@@ -67,7 +71,7 @@ start_services() {
   wait "$api_pid" "$ui_pid"
 }
 
-case "${1:-check}" in
+case "${1:-start}" in
   check) check ;;
   migrate) migrate ;;
   start) start_services ;;
