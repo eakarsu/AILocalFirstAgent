@@ -124,6 +124,11 @@ start_services() {
     { echo "Frontend dependencies are absent; run reviewed locked installs separately." >&2; return 1; }
 
   frontend_port="${FRONTEND_PORT:-${CLIENT_PORT:-4050}}"
+  configured_api_url="${REACT_APP_API_URL:-http://127.0.0.1:${BACKEND_PORT:-4051}/api}"
+  case "$configured_api_url" in
+    */api) frontend_api_url="$configured_api_url" ;;
+    *) frontend_api_url="${configured_api_url%/}/api" ;;
+  esac
   allowed_origins="${ALLOWED_ORIGINS:-}"
   if [[ "${NODE_ENV:-development}" != "production" ]]; then
     allowed_origins="${allowed_origins:-http://127.0.0.1:$frontend_port}"
@@ -132,9 +137,9 @@ start_services() {
   ALLOWED_ORIGINS="$allowed_origins" npm --prefix "$API_DIR" start &
   api_pid=$!
   if node -e "const p=require('./$UI_DIR/package.json');process.exit(p.scripts&&p.scripts.dev?0:1)"; then
-    PORT="$frontend_port" REACT_APP_API_URL="${REACT_APP_API_URL:-http://127.0.0.1:${BACKEND_PORT:-4051}/api}" npm --prefix "$UI_DIR" run dev &
+    PORT="$frontend_port" REACT_APP_API_URL="$frontend_api_url" npm --prefix "$UI_DIR" run dev &
   else
-    BROWSER=none PORT="$frontend_port" REACT_APP_API_URL="${REACT_APP_API_URL:-http://127.0.0.1:${BACKEND_PORT:-4051}/api}" npm --prefix "$UI_DIR" start &
+    BROWSER=none PORT="$frontend_port" REACT_APP_API_URL="$frontend_api_url" npm --prefix "$UI_DIR" start &
   fi
   ui_pid=$!
 
