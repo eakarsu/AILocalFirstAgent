@@ -54,15 +54,15 @@ export const on_device_modelsApi = crud('on-device-models');
 export const privacy_audit_logApi = crud('privacy-audit-log');
 export const file_index_entriesApi = crud('file-index-entries');
 
-export const aiLocalTaskPlan = (body) => request('/ai/local-task-plan', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiFileSemanticSearch = (body) => request('/ai/file-semantic-search', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiScheduledMacro = (body) => request('/ai/scheduled-macro', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiDraftReply = (body) => request('/ai/draft-reply', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiWeeklySummary = (body) => request('/ai/weekly-summary', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiPrivacyClassifier = (body) => request('/ai/privacy-classifier', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiModelRouterSelect = (body) => request('/ai/model-router-select', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiConflictFinder = (body) => request('/ai/conflict-finder', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiDailyDigest = (body) => request('/ai/daily-digest', { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiLocalTaskPlan = (body, options = {}) => request('/ai/local-task-plan', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiFileSemanticSearch = (body, options = {}) => request('/ai/file-semantic-search', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiScheduledMacro = (body, options = {}) => request('/ai/scheduled-macro', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiDraftReply = (body, options = {}) => request('/ai/draft-reply', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiWeeklySummary = (body, options = {}) => request('/ai/weekly-summary', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiPrivacyClassifier = (body, options = {}) => request('/ai/privacy-classifier', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiModelRouterSelect = (body, options = {}) => request('/ai/model-router-select', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiConflictFinder = (body, options = {}) => request('/ai/conflict-finder', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiDailyDigest = (body, options = {}) => request('/ai/daily-digest', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
 
 export const getAIHistory = (feature, limit = 25) => {
   const qs = new URLSearchParams({ ...(feature ? { feature } : {}), limit: String(limit) }).toString();
@@ -102,10 +102,10 @@ export const syncRulesApi = {
 };
 
 // ---- Apply pass 7: full backlog implementation ----
-export const aiLocalFallbackOrchestrator = (body) => request('/ai/local-fallback-orchestrator', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiConflictAutoResolver = (body) => request('/ai/conflict-auto-resolver', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiRagRerankPlanner = (body) => request('/ai/rag-rerank-planner', { method: 'POST', body: JSON.stringify(body || {}) });
-export const aiPromptRedactionRewriter = (body) => request('/ai/prompt-redaction-rewriter', { method: 'POST', body: JSON.stringify(body || {}) });
+export const aiLocalFallbackOrchestrator = (body, options = {}) => request('/ai/local-fallback-orchestrator', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiConflictAutoResolver = (body, options = {}) => request('/ai/conflict-auto-resolver', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiRagRerankPlanner = (body, options = {}) => request('/ai/rag-rerank-planner', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
+export const aiPromptRedactionRewriter = (body, options = {}) => request('/ai/prompt-redaction-rewriter', { ...options, method: 'POST', body: JSON.stringify(body || {}) });
 
 export const crdtApi = {
   listDocs: () => request('/crdt/documents'),

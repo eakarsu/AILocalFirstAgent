@@ -13,7 +13,7 @@ export default function AIRagRerankPlannerPage() {
         { key: 'top_k', label: 'Top K', type: 'number' },
         { key: 'current_results', label: 'Current Hits (comma-separated paths)', type: 'textarea' },
       ]}
-      run={(v) => aiRagRerankPlanner(v)}
+      run={(v, requestOptions) => aiRagRerankPlanner(v, requestOptions)}
     />
   );
 }

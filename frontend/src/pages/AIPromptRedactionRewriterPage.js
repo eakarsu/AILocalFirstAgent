@@ -12,7 +12,7 @@ export default function AIPromptRedactionRewriterPage() {
         { key: 'prompt', label: 'Prompt to Send', type: 'textarea' },
         { key: 'target', label: 'Send Target', type: 'text', placeholder: 'cloud LLM | partner API | log sink' },
       ]}
-      run={(v) => aiPromptRedactionRewriter(v)}
+      run={(v, requestOptions) => aiPromptRedactionRewriter(v, requestOptions)}
     />
   );
 }

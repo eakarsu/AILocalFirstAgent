@@ -13,7 +13,7 @@ export default function AIDraftReplyPage() {
         { key: 'tone', label: 'Tone', type: 'select', placeholder: '', options: ["professional","friendly","curt","warm","formal"] },
         { key: 'context_hint', label: 'Context Hint', type: 'text', placeholder: '' }
       ]}
-      run={(v) => aiDraftReply(v)}
+      run={(v, requestOptions) => aiDraftReply(v, requestOptions)}
     />
   );
 }

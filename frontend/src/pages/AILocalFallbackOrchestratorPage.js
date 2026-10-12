@@ -14,7 +14,7 @@ export default function AILocalFallbackOrchestratorPage() {
         { key: 'sensitivity', label: 'Sensitivity', type: 'select', options: ['public', 'personal', 'sensitive', 'medical', 'financial'] },
         { key: 'task_description', label: 'Task Description', type: 'textarea', placeholder: '' },
       ]}
-      run={(v) => aiLocalFallbackOrchestrator(v)}
+      run={(v, requestOptions) => aiLocalFallbackOrchestrator(v, requestOptions)}
     />
   );
 }

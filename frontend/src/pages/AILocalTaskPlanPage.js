@@ -12,7 +12,7 @@ export default function AILocalTaskPlanPage() {
         { key: 'goal', label: 'Goal', type: 'textarea', placeholder: '' },
         { key: 'data_sources', label: 'Sources', type: 'text', placeholder: 'mail, files, calendar' }
       ]}
-      run={(v) => aiLocalTaskPlan(v)}
+      run={(v, requestOptions) => aiLocalTaskPlan(v, requestOptions)}
     />
   );
 }

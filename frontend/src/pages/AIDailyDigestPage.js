@@ -12,7 +12,7 @@ export default function AIDailyDigestPage() {
         { key: 'date', label: 'Date', type: 'text', placeholder: '' },
         { key: 'focus', label: 'Focus', type: 'text', placeholder: '' }
       ]}
-      run={(v) => aiDailyDigest(v)}
+      run={(v, requestOptions) => aiDailyDigest(v, requestOptions)}
     />
   );
 }

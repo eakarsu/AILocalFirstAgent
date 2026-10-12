@@ -12,7 +12,7 @@ export default function AIScheduledMacroPage() {
         { key: 'description', label: 'Description', type: 'textarea', placeholder: '' },
         { key: 'frequency', label: 'Frequency', type: 'select', placeholder: '', options: ["hourly","daily","weekly","custom"] }
       ]}
-      run={(v) => aiScheduledMacro(v)}
+      run={(v, requestOptions) => aiScheduledMacro(v, requestOptions)}
     />
   );
 }

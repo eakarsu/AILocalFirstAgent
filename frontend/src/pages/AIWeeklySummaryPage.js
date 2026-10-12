@@ -12,7 +12,7 @@ export default function AIWeeklySummaryPage() {
         { key: 'focus_area', label: 'Focus Area', type: 'text', placeholder: 'e.g. work email, projects, calendar' },
         { key: 'time_range', label: 'Time Range', type: 'text', placeholder: 'last 7 days' }
       ]}
-      run={(v) => aiWeeklySummary(v)}
+      run={(v, requestOptions) => aiWeeklySummary(v, requestOptions)}
     />
   );
 }

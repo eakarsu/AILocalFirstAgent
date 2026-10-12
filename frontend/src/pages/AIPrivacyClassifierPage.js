@@ -12,7 +12,7 @@ export default function AIPrivacyClassifierPage() {
         { key: 'snippet', label: 'Snippet to Classify', type: 'textarea', placeholder: '' },
         { key: 'intended_use', label: 'Intended Use', type: 'text', placeholder: 'cloud LLM, on-device only, redact' }
       ]}
-      run={(v) => aiPrivacyClassifier(v)}
+      run={(v, requestOptions) => aiPrivacyClassifier(v, requestOptions)}
     />
   );
 }

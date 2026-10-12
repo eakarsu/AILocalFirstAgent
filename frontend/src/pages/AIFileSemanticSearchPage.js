@@ -12,7 +12,7 @@ export default function AIFileSemanticSearchPage() {
         { key: 'query', label: 'Search Query', type: 'textarea', placeholder: '' },
         { key: 'context_hint', label: 'Folder/Date Hint', type: 'text', placeholder: '' }
       ]}
-      run={(v) => aiFileSemanticSearch(v)}
+      run={(v, requestOptions) => aiFileSemanticSearch(v, requestOptions)}
     />
   );
 }

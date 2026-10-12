@@ -12,7 +12,7 @@ export default function AIConflictFinderPage() {
         { key: 'data_streams', label: 'Streams', type: 'text', placeholder: 'mail, calendar, slack' },
         { key: 'subject', label: 'Subject', type: 'textarea', placeholder: '' }
       ]}
-      run={(v) => aiConflictFinder(v)}
+      run={(v, requestOptions) => aiConflictFinder(v, requestOptions)}
     />
   );
 }

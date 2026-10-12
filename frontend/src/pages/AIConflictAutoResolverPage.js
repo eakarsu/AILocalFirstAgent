@@ -16,7 +16,7 @@ export default function AIConflictAutoResolverPage() {
         { key: 'a_timestamp', label: 'A Timestamp', type: 'text', placeholder: 'ISO datetime' },
         { key: 'b_timestamp', label: 'B Timestamp', type: 'text', placeholder: 'ISO datetime' },
       ]}
-      run={(v) => aiConflictAutoResolver(v)}
+      run={(v, requestOptions) => aiConflictAutoResolver(v, requestOptions)}
     />
   );
 }

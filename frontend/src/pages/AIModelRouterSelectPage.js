@@ -13,7 +13,7 @@ export default function AIModelRouterSelectPage() {
         { key: 'sensitivity', label: 'Sensitivity', type: 'select', placeholder: '', options: ["public","personal","sensitive","medical","financial"] },
         { key: 'latency_target_ms', label: 'Latency Target (ms)', type: 'number', placeholder: '' }
       ]}
-      run={(v) => aiModelRouterSelect(v)}
+      run={(v, requestOptions) => aiModelRouterSelect(v, requestOptions)}
     />
   );
 }
